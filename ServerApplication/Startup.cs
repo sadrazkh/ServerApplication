@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Extensions.DependencyInjection;
 using Common;
 using WebFramework.Configuration;
 using WebFramework.CustomMapping;
@@ -34,7 +35,6 @@ namespace ServerApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.Configure<SiteSettings>(Configuration.GetSection(nameof(SiteSettings)));
             services.InitializeAutoMapper();
             services.AddDbContext(Configuration);
@@ -47,6 +47,8 @@ namespace ServerApplication
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ServerApplication", Version = "v1" });
             });
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,19 +62,14 @@ namespace ServerApplication
             }
 
             app.IntializeDatabase();
-
             app.UseCustomExceptionHandler();
-
             app.UseHsts(env);
-
             app.UseHttpsRedirection();
-
             app.UseElmahCore(_siteSetting);
 
             //app.UseSwaggerAndUI();
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
